@@ -14,18 +14,20 @@
 #import "LoginViewController.h"
 @import Firebase;
 #import "AppDelegate.h"
+#import "Like.h"
 
 
 @interface ViewController ()
 @property (strong, nonatomic) FIRDatabaseReference *ref;
 @property (nonatomic) BOOL newMessagesOnTop;
 @property (nonatomic) NSInteger count;
-
+@property (nonatomic) BOOL checkLike;
 @end
 
 @implementation ViewController
 @synthesize newMessagesOnTop;
 @synthesize count;
+@synthesize checkLike;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -74,8 +76,9 @@
         self.dicPost = dic;
         NSLog(@"Info : %@",dic);
         
-        NSMutableArray *like = dic[@"like"];
-        self.likeArray = like;
+        // NSMutableDictionary *likeComment = dic[@"like"];
+        // NSArray *like = dic[@"like"];
+        // self.likeArray = like;
         //  NSLog(@"Like : %@",like);
         
         NSMutableArray *comment = dic[@"comment"];
@@ -93,11 +96,12 @@
     [[self.ref child:@"comment"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot * _Nonnull snapshot)  {
         // Add the chat message to the array.
         NSDictionary *newComment = snapshot.value;
+        
         NSLog(@"new commnet : %@", newComment);
         if(newMessagesOnTop) {
-             FIRUser *currentUser = [FIRAuth auth].currentUser;
-             NSString *currentUid = currentUser.uid;
-             NSString *uidPost = self.dicPost[@"uid"];
+            FIRUser *currentUser = [FIRAuth auth].currentUser;
+            NSString *currentUid = currentUser.uid;
+            NSString *uidPost = self.dicPost[@"uid"];
             if (![currentUid isEqualToString:uidPost]) {
                 return ;
             }
@@ -120,7 +124,35 @@
         }
         
     }];
+    [self loadLike];
+}
+
+-(void)loadLike {
+    self.likeArray = [[NSMutableArray alloc] init];
+    [[self.ref child:@"like"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot * _Nonnull snapshot)  {
+        // Add the chat message to the array.
+        Like *mylike = [[Like alloc] init];
+        mylike.email = snapshot.value[@"email"];
+        NSNumber* mapXNum = snapshot.value[@"like"];
+        mylike.like =  [mapXNum isEqualToNumber:@0] ? NO : YES;
+        mylike.uid = snapshot.value[@"uid"];
+        [self.likeArray addObject:mylike];
+        [self.homeTableView reloadData];
+    }];
     
+    [[self.ref child:@"like"] observeEventType:FIRDataEventTypeChildRemoved withBlock:^(FIRDataSnapshot * _Nonnull snapshot)  {
+        // Add the chat message to the array.
+        FIRUser *currentUser = [FIRAuth auth].currentUser;
+        NSString *currentUid = currentUser.uid;
+        for (int i = 0; i < self.likeArray.count; i++) {
+            Like *like = self.likeArray[i];
+            if ([currentUid isEqualToString:like.uid]) {
+                [self.likeArray removeObjectAtIndex:i];
+            }
+        }
+        
+        [self.homeTableView reloadData];
+    }];
 }
 
 //MARK - custom banner view
@@ -206,25 +238,49 @@
 -(void)didPressLikeButtonClick:(UIButton*)sender
 {
     FIRUser *currentUser = [FIRAuth auth].currentUser;
+    //    NSString *currentUid = currentUser.uid;
+    //    __block BOOL checkUserLike = NO;
+    //    for (int i = 0; i < self.likeArray.count; i++) {
+    //        NSString *uid =  self.likeArray[i][@"uid"];
+    //        if ([currentUid isEqualToString:uid]) {
+    //            checkUserLike = YES;
+    //        }
+    //    }
+    //    if(checkUserLike) {
+    //        [[self.ref child:@"like"] removeValue];
+    //    } else {
+    //        NSDictionary *arr= @{
+    //                             @"uid" : currentUser.uid,
+    //                             @"email": currentUser.email,
+    //                             @"like": @YES
+    //                             };
+    //        NSDictionary *childUpdates = @{[@"/like/" stringByAppendingString:@"0"]: arr};
+    //        [self.ref updateChildValues:childUpdates];
+    //    }
+    checkLike = NO;
+    
     NSString *currentUid = currentUser.uid;
-    __block BOOL checkUserLike = NO;
     for (int i = 0; i < self.likeArray.count; i++) {
-        NSString *uid =  self.likeArray[i][@"uid"];
-        if ([currentUid isEqualToString:uid]) {
-            checkUserLike = YES;
+        Like *like = self.likeArray[i];
+        if ([currentUid isEqualToString:like.uid]) {
+            checkLike = YES;
         }
     }
-    if(checkUserLike) {
-        [[self.ref child:@"like"] removeValue];
+    if(checkLike) {
+        
+        [[[self.ref child:@"like"] child:currentUid] removeValue];
+        
     } else {
+        NSString *key = currentUser.uid;
         NSDictionary *arr= @{
                              @"uid" : currentUser.uid,
                              @"email": currentUser.email,
                              @"like": @YES
                              };
-        NSDictionary *childUpdates = @{[@"/like/" stringByAppendingString:@"0"]: arr};
+        NSDictionary *childUpdates = @{[@"/like/" stringByAppendingString:key]: arr};
         [self.ref updateChildValues:childUpdates];
     }
+    
     
 }
 
@@ -313,7 +369,7 @@
 }
 
 -(void)deletePostClik{
-     [self.ref removeValue];
+    [self.ref removeValue];
 }
 
 
@@ -407,11 +463,15 @@
 -(BOOL)getUserCurrentLike:(NSMutableArray*)array{
     BOOL check = false;
     FIRUser *currentUser = [FIRAuth auth].currentUser;
+    
     NSString *currentUid = currentUser.uid;
     for (int i = 0; i < array.count; i++) {
-        NSString *uid =  array[i][@"uid"];
-        if ([currentUid isEqualToString:uid]) {
-            return true;
+        Like *like = array[i];
+        if ([currentUid isEqualToString:like.uid]) {
+            if (like.like) {
+                check = true;
+                break;
+            }
         }
     }
     return check;

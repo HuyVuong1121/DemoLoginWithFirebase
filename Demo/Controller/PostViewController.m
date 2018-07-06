@@ -51,7 +51,13 @@
         [[self.ref child:@"title"] setValue:_titleField.text];
         
     } else {
-        NSArray *like = @[];
+        NSArray *like = @[
+                          @{
+                               @"uid": @"",
+                               @"email": @"",
+                               @"like": @NO,
+                               }
+                          ];
         NSArray *comment = @[
                              @{
                                 @"uid": @"",

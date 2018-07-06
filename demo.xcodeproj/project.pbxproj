@@ -27,6 +27,8 @@
 		4174A23E20EA1EA100ED9154 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4174A23D20EA1EA100ED9154 /* GoogleService-Info.plist */; };
 		41EEA6C520EB4C530022AB31 /* Global.m in Sources */ = {isa = PBXBuildFile; fileRef = 41EEA6C420EB4C530022AB31 /* Global.m */; };
 		41EEA6CB20EB83020022AB31 /* PostData.m in Sources */ = {isa = PBXBuildFile; fileRef = 41EEA6CA20EB83020022AB31 /* PostData.m */; };
+		41FA949F20EE189000FD4B36 /* Like.m in Sources */ = {isa = PBXBuildFile; fileRef = 41FA949D20EE188F00FD4B36 /* Like.m */; };
+		41FA94A220EE190C00FD4B36 /* Comment.m in Sources */ = {isa = PBXBuildFile; fileRef = 41FA94A120EE190C00FD4B36 /* Comment.m */; };
 		652024F45A2102E3DC19FBC6 /* libPods-DemoUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F5EE64EAC3A31F387A2384B /* libPods-DemoUITests.a */; };
 		6CEDFEDDA1BA17F110B360DA /* libPods-DemoTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 53B019A5FCA9234318D207CE /* libPods-DemoTests.a */; };
 /* End PBXBuildFile section */
@@ -83,6 +85,10 @@
 		41EEA6C420EB4C530022AB31 /* Global.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Global.m; sourceTree = "<group>"; };
 		41EEA6C920EB83020022AB31 /* PostData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PostData.h; sourceTree = "<group>"; };
 		41EEA6CA20EB83020022AB31 /* PostData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PostData.m; sourceTree = "<group>"; };
+		41FA949D20EE188F00FD4B36 /* Like.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Like.m; sourceTree = "<group>"; };
+		41FA949E20EE189000FD4B36 /* Like.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Like.h; sourceTree = "<group>"; };
+		41FA94A020EE190B00FD4B36 /* Comment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Comment.h; sourceTree = "<group>"; };
+		41FA94A120EE190C00FD4B36 /* Comment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Comment.m; sourceTree = "<group>"; };
 		53B019A5FCA9234318D207CE /* libPods-DemoTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DemoTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		59DCCC95790BB4C74341DF5A /* Pods-Demo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Demo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Demo/Pods-Demo.debug.xcconfig"; sourceTree = "<group>"; };
 		6A7C5B9DAD6C41C676B8E304 /* Pods-Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Demo.release.xcconfig"; path = "Pods/Target Support Files/Pods-Demo/Pods-Demo.release.xcconfig"; sourceTree = "<group>"; };
@@ -230,6 +236,10 @@
 		41EEA6C820EB82DB0022AB31 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				41FA94A020EE190B00FD4B36 /* Comment.h */,
+				41FA94A120EE190C00FD4B36 /* Comment.m */,
+				41FA949E20EE189000FD4B36 /* Like.h */,
+				41FA949D20EE188F00FD4B36 /* Like.m */,
 				41EEA6C920EB83020022AB31 /* PostData.h */,
 				41EEA6CA20EB83020022AB31 /* PostData.m */,
 			);
@@ -464,11 +474,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				4174A23A20EA048100ED9154 /* LoginViewController.m in Sources */,
+				41FA949F20EE189000FD4B36 /* Like.m in Sources */,
 				4114EB1C20EB13C000CFECC5 /* HomeTextImageCell.m in Sources */,
 				4114EB2120EB1AF500CFECC5 /* CommentCell.m in Sources */,
 				4174A20920E9DD5600ED9154 /* ViewController.m in Sources */,
 				4114EB2520EB2AF000CFECC5 /* PostViewController.m in Sources */,
 				4114EB1220EB122800CFECC5 /* HomeCell.m in Sources */,
+				41FA94A220EE190C00FD4B36 /* Comment.m in Sources */,
 				41EEA6C520EB4C530022AB31 /* Global.m in Sources */,
 				4174A21420E9DD5700ED9154 /* main.m in Sources */,
 				4174A20620E9DD5600ED9154 /* AppDelegate.m in Sources */,
